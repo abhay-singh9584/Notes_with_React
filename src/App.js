@@ -1,13 +1,27 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import Add from './Component/Add'
 import Update from './Component/Update'
 import View from './Component/View'
 const ncreate = createContext()
 
 function App() {
-  const [notes, setnotes] = useState([])
+  const anon_func=()=>{
+    const l=localStorage.getItem('Notes')
+    if(l){
+      return JSON.parse(localStorage.getItem('Notes'))
+    }
+    else{
+      return []
+    }
+  }
+  const [notes, setnotes] = useState(anon_func())
   const [view, setview] = useState(0)
   const [update, setupdate] = useState('')
+
+  useEffect(() => {
+    localStorage.setItem('Notes',JSON.stringify(notes))
+  }, [notes])
+  
 
   const ViewPage=()=>{
       setview(1)
@@ -54,5 +68,6 @@ function App() {
     </ncreate.Provider>
   )
 }
+
 export default App
 export {ncreate}
